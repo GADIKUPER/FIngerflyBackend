@@ -13,17 +13,6 @@ CREATE TABLE TBUsers(
 	[Score] [int] NOT NULL DEFAULT 0)
 GO
 
-CREATE TABLE TBUser(
-	[UserID] [int] IDENTITY(1,1) NOT NULL PRIMARY KEY,
-	[FirstName] [nvarchar](30) NULL,
-	[LastName] [nvarchar](30) NULL,
-	[Email] [nvarchar](50) NOT NULL,
-	[PasswordHash] [binary](64) NOT NULL,
-	[Salt] [uniqueidentifier] NULL,
-	[PictureUri] [nvarchar](max) NULL,
-	[Score] [int] NULL)
-GO
-
 --DROP TABLE TBAdministrator
 CREATE TABLE TBAdministrator(
 	[AdminID] [int] IDENTITY(1,1) NOT NULL,
@@ -104,44 +93,6 @@ Exec regisrerNewAccount 'tal','griman','tal@gmail.com',11010000,null,@id out
 Select @id as id
 Go
 
-
-/*
-CREATE PROC [dbo].[Register] (
-    @FirstName nvarchar(50),
-	@LastName nvarchar(50),
-	@Email nvarchar(50),
-	@Password nvarchar(50),
-	@PictureUri nvarchar(max)
-	)
-AS
-	BEGIN
-	DECLARE @salt UNIQUEIDENTIFIER=NEWID() -- יצירת ID אוטומטי --
-	DECLARE @user int
-	DECLARE @UserID int
-
-	SET @user = (SELECT Email FROM TBUsers WHERE Email = @Email) 
-
-	IF(@user IS NULL) -- תנאי כאשר הוא ריק הוא יצור חדש--
-		BEGIN
-			-- הנתונים ושמירה  --
-			INSERT INTO TBUsers(FirstName,LastName,Email,PasswordHash,Salt,PictureUri)
-			-- שמירת הנתונים והצגתם + הסתרת הסיסמה בעזרת HASHBYTES --
-			VALUES(@FirstName,@LastName,@Email,HASHBYTES('SHA2_512',@Password+CAST(@salt AS NVARCHAR(36))),@salt,@PictureUri)
-		-- בחירת הצגת משתמש לפי Userid --
-		SET @UserID = (SELECT UserID FROM TBUsers WHERE UserID = @@IDENTITY)
-		
-		
-			
-		SELECT UserID,Email FROM TBUsers WHERE UserID = @UserID
-		END
-	ELSE -- במידה ויש כבר משתמש--
-		BEGIN
-		-- על מנת שלא יקרוס הוא יציג שגיע --
-		SELECT -1 AS UserID
-		END
-	END
-GO
-*/
 --------------------- [ResetPassword] ------------------------------------------
 
 Create PROC ResetPassword (
